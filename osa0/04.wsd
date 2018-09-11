@@ -1,0 +1,22 @@
+käyttäjä->selain:
+
+note left of selain
+ käyttäjä kirjoittaa muistiinpanokenttään
+ muistiinpanon ja painaa "Talleta"
+end note
+
+selain->palvelin: POST fullstack-exampleapp.herokuapp.com/new_note
+
+note left of palvelin
+  palvelin tallettaa uuden muistiinpanon tietokantaan
+end note
+
+palvelin->selain: status 302, uudelleenohjaus
+
+note left of selain
+ palvelin kertoo selaimelle operaation onnistuneen ja kehottaa
+ sitä lataamaan sivun uudelleen. tämän jälkeen kohdan 0.3
+ vaiheet tapahtuvat uudestaan ensimmäisestä GET-pyynnöstä
+ alkaen.
+end note
+
