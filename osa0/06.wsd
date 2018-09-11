@@ -1,0 +1,24 @@
+kayttaja->selain:
+
+note left of selain
+ kayttaja kirjottaa tekstikenttään uuden muistiinpanon
+ ja panaa "Talleta"
+end note
+
+note left of selain
+ skripti luo uuden muistiinpanoelementin muistiin ja käskee
+ selainta piirtämään muistissa olevat alkiot uudelleen
+end note
+
+selain->palvelin: POST fullstack-exampleapp.herokuapp.com/new_note_spa
+
+note left of palvelin
+ palvelin lisää uuden muistiinpanon tietokantaan
+end note
+
+palvelin->selain: status 201, luonti onnistui
+
+note left of selain
+ kaikki valmista
+end note
+
