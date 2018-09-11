@@ -1,0 +1,43 @@
+käyttäjä->selain:
+
+note left of selain
+ käyttäjä kirjottaa osoiteriville
+ fullstack-exampleapp.herokuapp.com/spa
+end note
+
+selain->palvelin: GET fullstack-exampleapp.herokuapp.com/spa
+
+note left of palvelin
+ muodostetaan HTML missä vain sivun runko
+end note
+
+palvelin->selain: status 200, HTML-tiedosto
+
+note left of selain
+ selain näyttää palvelimen palauttaman HTML:n
+ ja lähettää lisäkutsuja
+end note
+
+selain->palvelin: GET fullstack-exampleapp.herokuapp.com/main.css
+selain->palvelin: GET fullstack-exampleapp.herokuapp.com/spa.js
+palvelin->selain: status 200, CSS-tiedosto
+
+note left of selain
+ selain parsii tyylitiedoston ja päivittää sivun ulkoasun
+end note over 
+
+palvelin -> selain: status 200, JavaScript-tiedosto
+
+note left of selain
+ selain parsii skriptitiedoston ja suorittaa sen.
+ skripti esittää lisäkutsun palvelimelle ja odottaa vastausta
+end note
+
+selain -> palvelin: GET fullstack-exampleapp.herokuapp.com/data.json
+palvelin -> selain: status 200, JSON-tiedosto
+
+note left of selain
+ skripti luo koko listan HTML-elementtejä datan pohjalta
+ ja lisää ne DOM-puuhun. sivu on valmis.
+end note
+
