@@ -1,6 +1,40 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
+const FeedbackButton = ({callback, id, children}) => (
+  <button onClick={callback} id={id}>{children}</button>
+);
+
+const StatisticRow = ({children}) => (
+  <div>{children}</div>
+);
+
+const Statistics = ({good, neutral, bad}) => (
+  <div>
+    {(good + neutral + bad) === 0 ? (
+      <div>ei yhtään palautetta annettu</div>
+    ) : (
+      <React.Fragment>
+        <StatisticRow>
+          {`hyvä ${good}`}
+        </StatisticRow>
+        <StatisticRow>
+          {`neutraali ${neutral}`}
+        </StatisticRow>
+        <StatisticRow>
+          {`huono ${bad}`}
+        </StatisticRow>
+        <StatisticRow>
+          {`keskiarvo ${(((good - bad) / (good + neutral + bad)) || 0).toFixed(1)}`}
+        </StatisticRow>
+        <StatisticRow>
+          {`positiivisia ${(((good / (good + neutral + bad))*100) || 0).toFixed(1)} %`}
+        </StatisticRow>
+      </React.Fragment>
+    )}
+  </div>
+);
+
 class App extends React.Component {
   constructor(props) {
     super(props)
@@ -22,27 +56,13 @@ class App extends React.Component {
       <div>
         <h1>anna palautetta</h1>
         <div>
-          <button onClick={this.handleOnClick} id="good">hyvä</button>
-          <button onClick={this.handleOnClick} id="neutral">neutraali</button>
-          <button onClick={this.handleOnClick} id="bad">huono</button>
+          <FeedbackButton callback={this.handleOnClick} id="good">hyvä</FeedbackButton>
+          <FeedbackButton callback={this.handleOnClick} id="neutral">neutraal</FeedbackButton>
+          <FeedbackButton callback={this.handleOnClick} id="bad">huono</FeedbackButton>
         </div>
 
         <h2>statistiikka</h2>
-        <div>
-          {`hyvä ${this.state.good}`}
-        </div>
-        <div>
-          {`neutraali ${this.state.neutral}`}
-        </div>
-        <div>
-          {`huono ${this.state.bad}`}
-        </div>
-        <div>
-          {`keskiarvo ${(((this.state.good - this.state.bad) / (this.state.good + this.state.neutral + this.state.bad)) || 0).toFixed(1)}`}
-        </div>
-        <div>
-          {`positiivisia ${(((this.state.good / (this.state.good + this.state.neutral + this.state.bad))*100) || 0).toFixed(1)} %`}
-        </div>
+        <Statistics good={this.state.good} neutral={this.state.neutral} bad={this.state.bad} />
       </div>
     );
   }
