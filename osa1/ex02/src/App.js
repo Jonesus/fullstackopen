@@ -45,7 +45,7 @@ class App extends React.Component {
     };
     this.handleOnClick = this.handleOnClick.bind(this);
   }
-
+  /** Ebin 1.10 solution */
   handleOnClick(e) {
     const target = e.target.id
     this.setState({[target]: this.state[target] + 1})
