@@ -5,8 +5,11 @@ const FeedbackButton = ({callback, id, children}) => (
   <button onClick={callback} id={id}>{children}</button>
 );
 
-const StatisticRow = ({children}) => (
-  <div>{children}</div>
+const StatisticRow = ({heading, data}) => (
+  <tr>
+    <th>{heading}</th>
+    <td>{data}</td>
+  </tr>
 );
 
 const Statistics = ({good, neutral, bad}) => (
@@ -14,23 +17,30 @@ const Statistics = ({good, neutral, bad}) => (
     {(good + neutral + bad) === 0 ? (
       <div>ei yhtään palautetta annettu</div>
     ) : (
-      <React.Fragment>
-        <StatisticRow>
-          {`hyvä ${good}`}
-        </StatisticRow>
-        <StatisticRow>
-          {`neutraali ${neutral}`}
-        </StatisticRow>
-        <StatisticRow>
-          {`huono ${bad}`}
-        </StatisticRow>
-        <StatisticRow>
-          {`keskiarvo ${(((good - bad) / (good + neutral + bad)) || 0).toFixed(1)}`}
-        </StatisticRow>
-        <StatisticRow>
-          {`positiivisia ${(((good / (good + neutral + bad))*100) || 0).toFixed(1)} %`}
-        </StatisticRow>
-      </React.Fragment>
+      <table>
+        <tbody>
+          <StatisticRow
+            heading="hyvä"
+            data={good}
+          />
+          <StatisticRow
+            heading="neutraali"
+            data={neutral}
+          />
+          <StatisticRow
+            heading="huono"
+            data={bad}
+          />
+          <StatisticRow
+            heading="keskiarvo"
+            data={(((good - bad) / (good + neutral + bad)) || 0).toFixed(1)}
+          />
+          <StatisticRow
+            heading="positiivisia"
+            data={`${(((good / (good + neutral + bad))*100) || 0).toFixed(1)} %`}
+          />
+        </tbody>
+      </table>
     )}
   </div>
 );
