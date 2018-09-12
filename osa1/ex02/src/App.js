@@ -37,6 +37,12 @@ class App extends React.Component {
         <div>
           {`huono ${this.state.bad}`}
         </div>
+        <div>
+          {`keskiarvo ${(((this.state.good - this.state.bad) / (this.state.good + this.state.neutral + this.state.bad)) || 0).toFixed(1)}`}
+        </div>
+        <div>
+          {`positiivisia ${(((this.state.good / (this.state.good + this.state.neutral + this.state.bad))*100) || 0).toFixed(1)} %`}
+        </div>
       </div>
     );
   }
