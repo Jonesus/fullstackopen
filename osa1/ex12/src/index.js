@@ -1,6 +1,17 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
+const BestAnecdote = ({score, anecdote}) => (
+  <React.Fragment>
+    <div>
+      {anecdote}
+    </div>
+    <div>
+      has {score} votes
+    </div>
+  </React.Fragment>
+)
+
 class App extends React.Component {
   constructor(props) {
     super(props)
@@ -10,6 +21,7 @@ class App extends React.Component {
     }
     this.handleNext = this.handleNext.bind(this);
     this.handleVote = this.handleVote.bind(this);
+    this.getBestAnecdote = this.getBestAnecdote.bind(this);
   }
 
   handleNext(e) {
@@ -20,6 +32,11 @@ class App extends React.Component {
     const temp = [...this.state.anecdotes];
     temp[this.state.selected].score += 1;
     this.setState({anecdotes: temp});
+  }
+
+  getBestAnecdote() {
+    return this.state.anecdotes.reduce((current, best) =>
+      (best.score > current.score) ? best : current);
   }
 
   render() {
@@ -34,6 +51,11 @@ class App extends React.Component {
         <div>
           <button onClick={this.handleVote}>vote</button>
           <button onClick={this.handleNext}>next anecdote</button>
+        </div>
+
+        <h2>anecdote with most votes:</h2>
+        <div>
+          <BestAnecdote {...this.getBestAnecdote()} />
         </div>
       </React.Fragment>
     )
