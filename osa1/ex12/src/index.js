@@ -5,22 +5,36 @@ class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      selected: 0
+      selected: 0,
+      anecdotes: props.anecdotes.map(anecdote => {return {score: 0, anecdote}}),
     }
-    this.handleOnClick = this.handleOnClick.bind(this);
+    this.handleNext = this.handleNext.bind(this);
+    this.handleVote = this.handleVote.bind(this);
   }
 
-  handleOnClick(e) {
+  handleNext(e) {
     this.setState({selected: Math.floor(Math.random() * this.props.anecdotes.length)})
+  }
+
+  handleVote(e) {
+    const temp = [...this.state.anecdotes];
+    temp[this.state.selected].score += 1;
+    this.setState({anecdotes: temp});
   }
 
   render() {
     return (
       <React.Fragment>
         <div>
-          {this.props.anecdotes[this.state.selected]}
+          {this.state.anecdotes[this.state.selected].anecdote}
         </div>
-        <button onClick={this.handleOnClick}>next anecdote</button>
+        <div>
+          {`has ${this.state.anecdotes[this.state.selected].score} votes`}
+        </div>
+        <div>
+          <button onClick={this.handleVote}>vote</button>
+          <button onClick={this.handleNext}>next anecdote</button>
+        </div>
       </React.Fragment>
     )
   }
