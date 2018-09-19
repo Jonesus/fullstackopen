@@ -14,7 +14,7 @@ const Osa = ({osa, tehtava}) => (
 );
 
 const Yhteensa = ({osat}) => (
-    <p>{`yhteensä ${osat[0].tehtavia + osat[1].tehtavia + osat[2].tehtavia} tehtävää`}</p>
+    <p>{`yhteensä ${osat.reduce((acc, current) => acc + current.tehtavia, 0)} tehtävää`}</p>
 );
 
 const Kurssi = ({kurssi}) => (
@@ -41,6 +41,10 @@ const App = () => {
         nimi: 'Komponenttien tila',
         tehtavia: 14,
       },
+      {
+        nimi: 'Redux',
+        tehtavia: 7,
+      }
     ],
   }
 
