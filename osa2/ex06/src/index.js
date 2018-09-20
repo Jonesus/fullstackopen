@@ -1,8 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import axios from 'axios';
-
-const API_URL = 'http://localhost:3001/persons';
+import {get, post} from './api';
 
 const NumeroLista = ({tyypit, filtteri}) => (
   <React.Fragment>
@@ -53,8 +51,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    axios.get(API_URL)
-      .then(response => this.setState({persons: response.data}));
+    get().then(response => this.setState({persons: response.data}));
   }
 
   submit(event) {
@@ -72,7 +69,7 @@ class App extends React.Component {
         [...this.state.persons, newPerson]
       })
 
-      axios.post(API_URL, newPerson);
+      post(newPerson);
     }
     this.setState({ newName: '', newNumber: '' }) ;
   }
