@@ -1,6 +1,33 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+const NumeroLista = ({tyypit, filtteri}) => (
+  <React.Fragment>
+    <h2>Numerot</h2>
+    {tyypit.map(person =>
+      person.name.toLowerCase().includes(filtteri.toLowerCase()) &&
+        <div key={person.name}>{person.name} {person.number}</div>)
+    }
+  </React.Fragment>
+);
+
+const NumeroFormi = ({submitCallback, name, nameCallback, number, numberCallback}) => (
+  <React.Fragment>
+    <h2>Lisää uusi</h2>
+    <form onSubmit={submitCallback}>
+      <div>
+        nimi: <input value={name} onChange={nameCallback}/>
+      </div>
+      <div>
+        numero: <input value={number} onChange={numberCallback}/>
+      </div>
+      <div>
+        <button type="submit">lisää</button>
+      </div>
+    </form>
+  </React.Fragment>
+);
+
 class App extends React.Component {
   constructor(props) {
     super(props)
@@ -22,6 +49,7 @@ class App extends React.Component {
   }
 
   submit(event) {
+    event.preventDefault();
     if (this.state.persons.some(person => person.name === this.state.newName)) {
       alert('No duplicates!');
     } else {
@@ -33,7 +61,6 @@ class App extends React.Component {
       })
     }
     this.setState({ newName: '', newNumber: '' }) ;
-    event.preventDefault();
   }
 
   handleNameChange(event) {
@@ -54,24 +81,15 @@ class App extends React.Component {
         <h1>Puhelinluettelo</h1>
         rajaa näytettäviä <input value={this.state.filter} onChange={this.handleFilterChange}/>
 
-        <h2>Lisää uusi</h2>
-        <form onSubmit={this.submit}>
-          <div>
-            nimi: <input value={this.state.newName} onChange={this.handleNameChange}/>
-          </div>
-          <div>
-            numero: <input value={this.state.newNumber} onChange={this.handleNumberChange}/>
-          </div>
-          <div>
-            <button type="submit">lisää</button>
-          </div>
-        </form>
+        <NumeroFormi
+          submitCallback={this.submit}
+          name={this.state.newName}
+          nameCallback={this.handleNameChange}
+          number={this.state.newNumber}
+          numberCallback={this.handleNumberChange}
+        />
 
-        <h2>Numerot</h2>
-        {this.state.persons.map(person =>
-          person.name.toLowerCase().includes(this.state.filter.toLowerCase()) &&
-            <div key={person.name}>{person.name} {person.number}</div>
-          )}
+        <NumeroLista tyypit={this.state.persons} filtteri={this.state.filter} />
       </div>
     )
   }
