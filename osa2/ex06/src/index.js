@@ -43,6 +43,12 @@ const NumeroFormi = ({
   </React.Fragment>
 );
 
+const Notification = ({message}) => (
+  !!message
+    ? <div style={{backgroundColor: 'green', padding: '20px', color: 'white'}}>{message}</div>
+    : null
+);
+
 class App extends React.Component {
   constructor(props) {
     super(props)
@@ -51,6 +57,7 @@ class App extends React.Component {
       newName: '',
       newNumber: '',
       filter: '',
+      notification: '',
     }
     this.submit = this.submit.bind(this);
     this.handleNameChange = this.handleNameChange.bind(this);
@@ -72,6 +79,7 @@ class App extends React.Component {
     if (duplicates.length !== 0) {
       if (window.confirm('update number?')) {
         this.handleChange(duplicates[0].id, {...duplicates[0], number: this.state.newNumber})
+        this.notify(`päivitettiin ${duplicates[0].name} numero`);
       }
     } else {
       const newPerson = {
@@ -79,9 +87,10 @@ class App extends React.Component {
         number: this.state.newNumber,
       };
       post(newPerson)
-        .then(get().then(response => this.setState({persons: response.data})));
+        .then(() => get().then(response => this.setState({persons: response.data})));
+      this.notify(`lisättiin ${this.state.newName}`);
     }
-    this.setState({ newName: '', newNumber: '' }) ;
+    this.setState({ newName: '', newNumber: '' });
   }
 
   handleNameChange(event) {
@@ -97,6 +106,7 @@ class App extends React.Component {
   }
 
   handleDelete(id) {
+    this.notify(`poistettiin ${this.state.persons.filter(p => p.id === id)[0].name}`);
     del(id);
     this.setState({persons: this.state.persons.filter(
       person => person.id !== id
@@ -110,10 +120,17 @@ class App extends React.Component {
     ), newPerson]});
   }
 
+  notify(message) {
+    this.setState({ notification: message });
+    setTimeout(() => this.setState({ notification: '' }), 3000);
+  }
+
   render() {
     return (
       <div>
         <h1>Puhelinluettelo</h1>
+        <Notification message={this.state.notification} />
+
         rajaa näytettäviä
         <input
           value={this.state.filter}
