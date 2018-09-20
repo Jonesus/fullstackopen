@@ -14,7 +14,13 @@ const NumeroLista = ({tyypit, filtteri}) => (
   </React.Fragment>
 );
 
-const NumeroFormi = ({submitCallback, name, nameCallback, number, numberCallback}) => (
+const NumeroFormi = ({
+  submitCallback,
+  name,
+  nameCallback,
+  number,
+  numberCallback,
+}) => (
   <React.Fragment>
     <h2>Lisää uusi</h2>
     <form onSubmit={submitCallback}>
@@ -47,20 +53,26 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    axios.get(API_URL).then(response => this.setState({persons: response.data}));
+    axios.get(API_URL)
+      .then(response => this.setState({persons: response.data}));
   }
 
   submit(event) {
     event.preventDefault();
-    if (this.state.persons.some(person => person.name === this.state.newName)) {
+    if (this.state.persons.some(
+      person => person.name === this.state.newName
+    )) {
       alert('No duplicates!');
     } else {
+      const newPerson = {
+        name: this.state.newName,
+        number: this.state.newNumber,
+      };
       this.setState({ persons:
-        [...this.state.persons, {
-          name: this.state.newName,
-          number: this.state.newNumber,
-        }]
+        [...this.state.persons, newPerson]
       })
+
+      axios.post(API_URL, newPerson);
     }
     this.setState({ newName: '', newNumber: '' }) ;
   }
@@ -81,7 +93,11 @@ class App extends React.Component {
     return (
       <div>
         <h1>Puhelinluettelo</h1>
-        rajaa näytettäviä <input value={this.state.filter} onChange={this.handleFilterChange}/>
+        rajaa näytettäviä
+        <input
+          value={this.state.filter}
+          onChange={this.handleFilterChange}
+        />
 
         <NumeroFormi
           submitCallback={this.submit}
@@ -91,7 +107,10 @@ class App extends React.Component {
           numberCallback={this.handleNumberChange}
         />
 
-        <NumeroLista tyypit={this.state.persons} filtteri={this.state.filter} />
+        <NumeroLista
+          tyypit={this.state.persons}
+          filtteri={this.state.filter}
+        />
       </div>
     )
   }
