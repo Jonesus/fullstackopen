@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {get, post, del} from './api';
+import {get, post, del, put} from './api';
 
 const NumeroLista = ({tyypit, filtteri, deleteCallback}) => (
   <React.Fragment>
@@ -9,7 +9,7 @@ const NumeroLista = ({tyypit, filtteri, deleteCallback}) => (
       <tbody>
         {tyypit.map(person =>
           person.name.toLowerCase().includes(filtteri.toLowerCase()) &&
-            <tr key={person.id}>
+            <tr key={person.name}>
               <th>{person.name}</th>
               <td>{person.number}</td>
               <td><button onClick={() => deleteCallback(person.id)}>poista</button></td>
@@ -57,6 +57,7 @@ class App extends React.Component {
     this.handleNumberChange = this.handleNumberChange.bind(this);
     this.handleFilterChange = this.handleFilterChange.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   componentDidMount() {
@@ -65,20 +66,20 @@ class App extends React.Component {
 
   submit(event) {
     event.preventDefault();
-    if (this.state.persons.some(
+    const duplicates = this.state.persons.filter(
       person => person.name === this.state.newName
-    )) {
-      alert('No duplicates!');
+    );
+    if (duplicates.length !== 0) {
+      if (window.confirm('update number?')) {
+        this.handleChange(duplicates[0].id, {...duplicates[0], number: this.state.newNumber})
+      }
     } else {
       const newPerson = {
         name: this.state.newName,
         number: this.state.newNumber,
       };
-      this.setState({ persons:
-        [...this.state.persons, newPerson]
-      })
-
-      post(newPerson);
+      post(newPerson)
+        .then(get().then(response => this.setState({persons: response.data})));
     }
     this.setState({ newName: '', newNumber: '' }) ;
   }
@@ -100,6 +101,13 @@ class App extends React.Component {
     this.setState({persons: this.state.persons.filter(
       person => person.id !== id
     )});
+  }
+
+  handleChange(id, newPerson) {
+    put(id, newPerson);
+    this.setState({persons: [...this.state.persons.filter(
+      person => person.id !== id
+    ), newPerson]});
   }
 
   render() {
