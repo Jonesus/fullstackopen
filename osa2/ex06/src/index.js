@@ -65,9 +65,14 @@ class App extends React.Component {
     this.handleFilterChange = this.handleFilterChange.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.updatePeople = this.updatePeople.bind(this);
   }
 
   componentDidMount() {
+    this.updatePeople();
+  }
+
+  updatePeople() {
     get().then(response => this.setState({persons: response.data}));
   }
 
@@ -87,7 +92,7 @@ class App extends React.Component {
         number: this.state.newNumber,
       };
       post(newPerson)
-        .then(() => get().then(response => this.setState({persons: response.data})));
+        .then(this.updatePeople);
       this.notify(`lisättiin ${this.state.newName}`);
     }
     this.setState({ newName: '', newNumber: '' });
@@ -114,10 +119,12 @@ class App extends React.Component {
   }
 
   handleChange(id, newPerson) {
-    put(id, newPerson);
-    this.setState({persons: [...this.state.persons.filter(
-      person => person.id !== id
-    ), newPerson]});
+    put(id, newPerson)
+      .then(this.updatePeople)
+      .catch(e => {
+        this.notify('muutettavan henkilön tiedot poistettiin jo');
+        this.updatePeople();
+      });
   }
 
   notify(message) {
