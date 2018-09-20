@@ -15,7 +15,11 @@ class App extends React.Component {
   }
 
   submit(event) {
-    this.setState({ persons: [...this.state.persons, {name: this.state.newName}]})
+    if (this.state.persons.some(person => person.name === this.state.newName)) {
+      alert('No duplicates!');
+    } else {
+      this.setState({ persons: [...this.state.persons, {name: this.state.newName}]})
+    }
     this.setState({ newName: '' }) ;
     event.preventDefault();
   }
