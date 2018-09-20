@@ -1,14 +1,22 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {get, post} from './api';
+import {get, post, del} from './api';
 
-const NumeroLista = ({tyypit, filtteri}) => (
+const NumeroLista = ({tyypit, filtteri, deleteCallback}) => (
   <React.Fragment>
     <h2>Numerot</h2>
-    {tyypit.map(person =>
-      person.name.toLowerCase().includes(filtteri.toLowerCase()) &&
-        <div key={person.name}>{person.name} {person.number}</div>)
-    }
+    <table>
+      <tbody>
+        {tyypit.map(person =>
+          person.name.toLowerCase().includes(filtteri.toLowerCase()) &&
+            <tr key={person.id}>
+              <th>{person.name}</th>
+              <td>{person.number}</td>
+              <td><button onClick={() => deleteCallback(person.id)}>poista</button></td>
+            </tr>
+        )}
+      </tbody>
+    </table>
   </React.Fragment>
 );
 
@@ -48,6 +56,7 @@ class App extends React.Component {
     this.handleNameChange = this.handleNameChange.bind(this);
     this.handleNumberChange = this.handleNumberChange.bind(this);
     this.handleFilterChange = this.handleFilterChange.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
   }
 
   componentDidMount() {
@@ -86,6 +95,13 @@ class App extends React.Component {
     this.setState({ filter: event.target.value });
   }
 
+  handleDelete(id) {
+    del(id);
+    this.setState({persons: this.state.persons.filter(
+      person => person.id !== id
+    )});
+  }
+
   render() {
     return (
       <div>
@@ -107,6 +123,7 @@ class App extends React.Component {
         <NumeroLista
           tyypit={this.state.persons}
           filtteri={this.state.filter}
+          deleteCallback={this.handleDelete}
         />
       </div>
     )
