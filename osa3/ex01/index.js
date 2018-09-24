@@ -66,8 +66,14 @@ app.get('/api/persons/:id', (req, res) => {
 });
 
 app.post('/api/persons', (req, res) => {
-    persons.push({...req.body, id: generateId()});
-    res.sendStatus(200);
+    if (!req.body.name || !req.body.number) {
+        res.status(400).send({ error: 'must have name and number!' })
+    } else if (persons.some(p => p.name === req.body.name)) {
+        res.status(400).send({ error: 'name must be unique!' })
+    } else {
+        persons.push({...req.body, id: generateId()});
+        res.sendStatus(200);
+    }
 });
 
 app.put('/api/persons/:id', (req, res) => {
