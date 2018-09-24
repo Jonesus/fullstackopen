@@ -1,11 +1,13 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const morgan = require('morgan');
 const app = express();
 
 const PORT = 3001;
 const URL = 'http://localhost';
 
 app.use(bodyParser.json());
+app.use(morgan('tiny'));
 
 app.all('*', (req, res, next) => {
     if (!req.get('Origin')) return next();
