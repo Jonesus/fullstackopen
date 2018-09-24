@@ -60,6 +60,11 @@ app.get('/api/persons', (req, res) => {
     res.json(persons)
 });
 
+app.get('/api/persons/:id', (req, res) => {
+    const id = Number(req.params.id)
+    res.json(persons.find(p => p.id === id))
+});
+
 app.post('/api/persons', (req, res) => {
     persons.push({...req.body, id: generateId()});
     res.sendStatus(200);
