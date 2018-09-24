@@ -1,28 +1,18 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors')
 const morgan = require('morgan');
 const app = express();
 
+
 const PORT = 3001;
-const URL = 'http://localhost';
 
 morgan.token('body', function (req, res) { return JSON.stringify(req.body) || '{}' })
 
-
+app.use(express.static('build'));
 app.use(bodyParser.json());
+app.use(cors())
 app.use(morgan(':method :url :body :status :res[content-length] - :response-time ms'));
-
-app.all('*', (req, res, next) => {
-    if (!req.get('Origin')) return next();
-
-    res.set('Access-Control-Allow-Origin', `${URL}:3000`);
-    res.set('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE');
-    res.set('Access-Control-Allow-Headers', 'X-Requested-With,Content-Type');
-
-    if ('OPTIONS' === req.method) return res.sendStatus(200);
-
-    next();
-});
 
 var persons = [
     {
