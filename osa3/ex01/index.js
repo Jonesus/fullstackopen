@@ -49,6 +49,13 @@ const generateId = () => {
     return maxId + 1
 };
 
+app.get('/info', (req, res) => {
+    res.send(`
+        <p>puhelinluettelossa ${persons.length} henkilön tiedot</p>
+        <p>${Date().toString()}</p>
+    `);
+});
+
 app.get('/api/persons', (req, res) => {
     res.json(persons)
 });
