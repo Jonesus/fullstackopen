@@ -1,6 +1,9 @@
 import axios from 'axios';
+require('dotenv').config();
 
-const API_URL = 'https://best-phonebook-app-ever.now.sh/api/persons';
+const API_URL = process.env.NODE_ENV === 'production'
+    ? 'https://best-phonebook-app-ever.now.sh/api/persons'
+    : 'http://localhost:3001/api/persons';
 
 export const get = () => axios.get(API_URL);
 
