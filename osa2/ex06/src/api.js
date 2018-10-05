@@ -1,6 +1,6 @@
 import axios from 'axios';
-const API_URL = 'http://localhost:3001/api/persons';
-//const API_URL = 'https://best-phonebook-app-ever.now.sh/api/persons';
+
+const API_URL = 'https://best-phonebook-app-ever.now.sh/api/persons';
 
 export const get = () => axios.get(API_URL);
 

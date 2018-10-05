@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
-const creds = require('./dbcreds');
+require('dotenv').config();
 
-const DB_URL = `mongodb://${creds.user}:${creds.pass}@ds113443.mlab.com:13443/best-phonebook`;
+const DB_URL = process.env.DB_URL;
 
 mongoose.connect(DB_URL, { useNewUrlParser: true });
 
