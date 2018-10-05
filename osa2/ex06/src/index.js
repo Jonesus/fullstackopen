@@ -44,7 +44,7 @@ const NumeroFormi = ({
 );
 
 const Notification = ({message}) => (
-  !!message
+  !!message // eslint-disable-line no-extra-boolean-cast
     ? <div style={{backgroundColor: 'green', padding: '20px', color: 'white'}}>{message}</div>
     : null
 );
@@ -121,7 +121,7 @@ class App extends React.Component {
   handleChange(id, newPerson) {
     put(id, newPerson)
       .then(this.updatePeople)
-      .catch(e => {
+      .catch(() => {
         this.notify('muutettavan henkilön tiedot poistettiin jo');
         this.updatePeople();
       });
