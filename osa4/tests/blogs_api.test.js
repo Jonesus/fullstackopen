@@ -38,9 +38,9 @@ describe('blogs', () => {
     const res = await api
       .post('/api/blogs')
       .send(newBlog)
+      .expect(201)
     const blogsAfter = await helpers.getBlogsInDb()
 
-    expect(res.status).toBe(201)
     expect(res.body.title).toBe(title)
     expect(blogsAfter.length).toBe(blogsBefore.length + 1)
     expect(blogsAfter).toContainEqual(newBlog)
@@ -57,9 +57,9 @@ describe('blogs', () => {
     const res = await api
       .post('/api/blogs')
       .send(likelessBlog)
+      .expect(201)
     const blogsAfter = await helpers.getBlogsInDb()
 
-    expect(res.status).toBe(201)
     expect(res.body.likes).toBe(0)
     expect(blogsAfter.length).toBe(blogsBefore.length + 1)
     expect(blogsAfter).toContainEqual({...likelessBlog, likes: 0})
@@ -85,5 +85,24 @@ describe('blogs', () => {
       .post('/api/blogs')
       .send(brokenBlog)
       .expect(400)
+  })
+
+  test('DELETE properly removes a blog', async () => {
+    const deletableBlog = {
+      'title': 'bad blog',
+      'author': 'badboi',
+      'url': 'www.bad.ru',
+      'likes': 0
+    }
+    const delBlog = new Blog(deletableBlog)
+    await delBlog.save()
+
+    const blogsBefore = await helpers.getBlogsInDb()
+    await api
+      .delete(`/api/blogs/${delBlog._id}`)
+      .expect(204)
+    const blogsAfter = await helpers.getBlogsInDb()
+
+    expect(blogsAfter.length).toBe(blogsBefore.length - 1)
   })
 })
