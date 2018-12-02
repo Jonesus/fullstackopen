@@ -1,0 +1,23 @@
+{
+  "name": "osa4",
+  "version": "1.0.0",
+  "description": "cool exercise",
+  "repository": "https://github.com/Jonesus/fullstackopen.git",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
+    "http": "0.0.0"
+  },
+  "devDependencies": {
+    "mongoose": "^5.3.14",
+    "nodemon": "^1.18.7"
+  }
+}
