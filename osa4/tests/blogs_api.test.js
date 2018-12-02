@@ -37,6 +37,28 @@ describe('blogs', () => {
     expect(resp.status).toBe(201)
     expect(resp.body.likes).toBe(0)
   })
+
+  test('POST body requires title', async () => {
+    const resp = await api
+      .post('/api/blogs')
+      .send({
+        'author': 'testboi',
+        'url': 'www.test.com',
+      })
+
+    expect(resp.status).toBe(400)
+  })
+
+  test('POST body requires url', async () => {
+    const resp = await api
+      .post('/api/blogs')
+      .send({
+        'title': 'lollers',
+        'author': 'testboi',
+      })
+
+    expect(resp.status).toBe(400)
+  })
 })
 
 afterAll(() => {
