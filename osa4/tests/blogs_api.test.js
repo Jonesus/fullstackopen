@@ -12,7 +12,7 @@ describe('blogs', () => {
 
   test('POST accepts new items', async () => {
     const title = Math.random().toString(36).substring(2, 15)
-    await api
+    const resp = await api
       .post('/api/blogs')
       .send({
         'title': title,
@@ -20,8 +20,22 @@ describe('blogs', () => {
         'url': 'www.test.com',
         'likes': 7
       })
-      .expect(201)
-      .expect(res => res.body.title === title)
+
+      expect(resp.status).toBe(201)
+      expect(resp.body.title).toBe(title)
+  })
+
+  test('POST body without likes gets set to 0', async () => {
+    const resp = await api
+      .post('/api/blogs')
+      .send({
+        'title': 'likeless',
+        'author': 'testboi',
+        'url': 'www.test.com',
+      })
+
+    expect(resp.status).toBe(201)
+    expect(resp.body.likes).toBe(0)
   })
 })
 
