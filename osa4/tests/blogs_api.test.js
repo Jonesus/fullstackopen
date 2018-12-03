@@ -44,7 +44,7 @@ describe('/api/blogs', () => {
 
     expect(res.body.title).toBe(title)
     expect(blogsAfter.length).toBe(blogsBefore.length + 1)
-    expect(blogsAfter).toContainEqual(newBlog)
+    expect(blogsAfter).toContainEqual({...newBlog, user: expect.anything()})
   })
 
   test('POST body without likes gets set to 0', async () => {
@@ -63,7 +63,7 @@ describe('/api/blogs', () => {
 
     expect(res.body.likes).toBe(0)
     expect(blogsAfter.length).toBe(blogsBefore.length + 1)
-    expect(blogsAfter).toContainEqual({...likelessBlog, likes: 0})
+    expect(blogsAfter).toContainEqual({...likelessBlog, likes: 0, user: expect.anything()})
   })
 
   test('POST body requires title', async () => {
