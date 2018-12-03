@@ -58,4 +58,25 @@ describe('/api/users', async () => {
     const usersAfter = await helpers.getUsersInDb()
     expect(usersAfter.length).toBe(usersBefore.length)
   })
+
+  test('POST fails if password too short', async () => {
+    const usersBefore = await helpers.getUsersInDb()
+  
+    const newUser = {
+      username: 'root',
+      name: 'Superuser',
+      password: 'ab'
+    }
+  
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+  
+    expect(result.body).toEqual({ error: 'password must be longer than 3'})
+  
+    const usersAfter = await helpers.getUsersInDb()
+    expect(usersAfter.length).toBe(usersBefore.length)
+  })
 })
