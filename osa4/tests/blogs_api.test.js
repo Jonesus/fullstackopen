@@ -4,7 +4,7 @@ const Blog = require('../models/blog')
 const helpers = require('./test_helper')
 const api = supertest(app)
 
-describe('blogs', () => {
+describe('/api/blogs', () => {
   beforeAll(async () => {
     await Blog.remove({})
 
@@ -73,7 +73,7 @@ describe('blogs', () => {
     await api
       .post('/api/blogs')
       .send(brokenBlog)
-      expect(400)
+      .expect(400)
   })
 
   test('POST body requires url', async () => {
@@ -104,5 +104,47 @@ describe('blogs', () => {
     const blogsAfter = await helpers.getBlogsInDb()
 
     expect(blogsAfter.length).toBe(blogsBefore.length - 1)
+  })
+  
+  test('DELETE does nothing if used with incorrect ID', async () => {
+    const blogsBefore = await helpers.getBlogsInDb()
+    await api
+      .delete('/api/blogs/lollers')
+      .expect(404)
+    const blogsAfter = await helpers.getBlogsInDb()
+
+    expect(blogsAfter).toEqual(blogsBefore)
+  })
+
+  test('PUT edits the correct blog', async () => {
+    const startLikes = 3
+    const editableBlog = {
+      'title': 'edit blog',
+      'author': 'editboi',
+      'url': 'www.ed.it',
+      'likes': startLikes
+    }
+    const editBlog = new Blog(editableBlog)
+    await editBlog.save()
+
+    const blogsBefore = await helpers.getBlogsInDb()
+    await api
+      .put(`/api/blogs/${editBlog._id}`)
+      .send({...editableBlog, likes: startLikes + 1})
+      .expect(204)
+    const blogsAfter = await helpers.getBlogsInDb()
+
+    expect(blogsAfter.length).toBe(blogsBefore.length)
+    expect(blogsAfter).toContainEqual({...editableBlog, likes: startLikes + 1})
+  })
+  
+  test('PUT does nothing if used with incorrect ID', async () => {
+    const blogsBefore = await helpers.getBlogsInDb()
+    await api
+      .put('/api/blogs/lollers')
+      .expect(404)
+    const blogsAfter = await helpers.getBlogsInDb()
+
+    expect(blogsAfter.length).toEqual(blogsBefore.length)
   })
 })
