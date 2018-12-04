@@ -1,5 +1,6 @@
 import React from 'react'
 import Blog from './components/Blog'
+import Toast from './components/Toast'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -8,7 +9,8 @@ class App extends React.Component {
     super(props)
     this.state = {
       blogs: [],
-      user: null
+      user: null,
+      notification: ''
     }
     this.usernameInput = React.createRef()
     this.passwordInput = React.createRef()
@@ -17,6 +19,7 @@ class App extends React.Component {
     this.blogAuthorInput = React.createRef()
     this.blogUrlInput = React.createRef()
 
+    this.notify = this.notify.bind(this)
     this.submitLogin = this.submitLogin.bind(this)
     this.logoutUser = this.logoutUser.bind(this)
     this.submitBlog = this.submitBlog.bind(this)
@@ -37,6 +40,9 @@ class App extends React.Component {
       this.usernameInput.current.value,
       this.passwordInput.current.value
     )
+    if (!user) {
+      this.notify('Wrong username or password')
+    }
     this.setState({ user })
     localStorage.setItem('user', JSON.stringify(user))
   }
@@ -58,6 +64,7 @@ class App extends React.Component {
     this.blogAuthorInput.current.value = ''
     this.blogUrlInput.current.value = ''
     this.refreshBlogs()
+    this.notify(`New blog: '${newBlog.title}' by ${newBlog.author}`)
   }
 
   logoutUser(event) {
@@ -66,10 +73,16 @@ class App extends React.Component {
     localStorage.removeItem('user')
   }
 
+  notify(text) {
+    this.setState({notification: text})
+    setTimeout(() => this.setState({notification: ''}), 5000)
+  }
+
   render() {
     return this.state.user === null
       ? (
         <div>
+          <Toast text={this.state.notification} />
           <h1>Log in to application</h1>
           <form onSubmit={this.submitLogin}>
             <label>
@@ -88,6 +101,7 @@ class App extends React.Component {
       ) : (
         <div>
           <h1>blogs</h1>
+          <Toast text={this.state.notification} />
           <p>
             {`${this.state.user.name} logged in`}
             <button onClick={this.logoutUser}>logout</button>
