@@ -1,6 +1,7 @@
 import React from 'react'
 import Blog from './components/Blog'
 import Toast from './components/Toast'
+import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -106,25 +107,27 @@ class App extends React.Component {
             {`${this.state.user.name} logged in`}
             <button onClick={this.logoutUser}>logout</button>
           </p>
-          <h2>create new</h2>
-          <form onSubmit={this.submitBlog}>
-            <label>
-              title:
-              <input name="title" ref={this.blogTitleInput} />
-            </label>
-            <br />
-            <label>
-              author:
-              <input name="author" ref={this.blogAuthorInput} />
-            </label>
-            <br />
-            <label>
-              url:
-              <input name="url" ref={this.blogUrlInput} />
-            </label>
-            <br />
-            <button type="submit">create</button>
-          </form>
+          <Togglable buttonLabel="add blog">
+            <h2>create new</h2>
+            <form onSubmit={this.submitBlog}>
+              <label>
+                title:
+                <input name="title" ref={this.blogTitleInput} />
+              </label>
+              <br />
+              <label>
+                author:
+                <input name="author" ref={this.blogAuthorInput} />
+              </label>
+              <br />
+              <label>
+                url:
+                <input name="url" ref={this.blogUrlInput} />
+              </label>
+              <br />
+              <button type="submit">create</button>
+            </form>
+          </Togglable>
           <br />
           {this.state.blogs.map(blog => 
             <Blog key={blog._id} blog={blog}/>
