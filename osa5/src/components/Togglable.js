@@ -1,6 +1,6 @@
 import React from 'react'
 
-class Togglable extends React.Component {
+export class Togglable extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -30,4 +30,33 @@ class Togglable extends React.Component {
   }
 }
 
-export default Togglable
+export class TogglableSpan extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      visible: false
+    }
+  }
+
+  toggleVisibility = () => {
+    this.setState({visible: !this.state.visible})
+  }
+
+  render() {
+    const showWhenVisible = {
+      paddingLeft: '10px',
+      display: this.state.visible ? '' : 'none'
+    }
+
+    return (
+      <div>
+        <div>
+          <span onClick={this.toggleVisibility}>{this.props.buttonLabel}</span>
+        </div>
+        <div style={showWhenVisible}>
+          {this.props.children}
+        </div>
+      </div>
+    )
+  }
+}

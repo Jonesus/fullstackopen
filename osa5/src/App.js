@@ -1,7 +1,7 @@
 import React from 'react'
 import Blog from './components/Blog'
 import Toast from './components/Toast'
-import Togglable from './components/Togglable'
+import { Togglable } from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
