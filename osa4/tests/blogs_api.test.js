@@ -1,6 +1,7 @@
 const supertest = require('supertest')
 const { app, server } = require('../index')
 const Blog = require('../models/blog')
+const User = require('../models/user')
 const helpers = require('./test_helper')
 
 const api = supertest(app)
@@ -8,6 +9,14 @@ const api = supertest(app)
 describe('/api/blogs', () => {
   beforeAll(async () => {
     await Blog.remove({})
+
+    const newUser = {
+      "username": "testfam",
+      "name": "Test McTestface",
+      "password": "ebinpw"
+    }
+    const user = new User(newUser)
+    await user.save()
 
     const blogs = await helpers.initialData.map(blog => new Blog(blog))
     await Promise.all(blogs.map(blog => blog.save()))
@@ -63,7 +72,8 @@ describe('/api/blogs', () => {
 
     expect(res.body.likes).toBe(0)
     expect(blogsAfter.length).toBe(blogsBefore.length + 1)
-    expect(blogsAfter).toContainEqual({...likelessBlog, likes: 0, user: expect.anything()})
+    expect(blogsAfter)
+      .toContainEqual({...likelessBlog, likes: 0, user: expect.anything()})
   })
 
   test('POST body requires title', async () => {
@@ -136,7 +146,8 @@ describe('/api/blogs', () => {
     const blogsAfter = await helpers.getBlogsInDb()
 
     expect(blogsAfter.length).toBe(blogsBefore.length)
-    expect(blogsAfter).toContainEqual({...editableBlog, likes: startLikes + 1})
+    expect(blogsAfter)
+      .toContainEqual({...editableBlog, likes: startLikes + 1})
   })
   
   test('PUT does nothing if used with incorrect ID', async () => {
