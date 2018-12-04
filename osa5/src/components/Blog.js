@@ -9,13 +9,13 @@ const blogStyle = {
   marginBottom: 5
 }
 
-const Blog = ({blog}) => (
+const Blog = ({blog, likeCallback}) => (
   <div style={blogStyle}>
     <TogglableSpan buttonLabel={`${blog.title} ${blog.author}`}>
       <a href={blog.url}>{blog.url}</a>
       <br />
       {`${blog.likes} likes`}
-      <button>like</button>
+      <button onClick={likeCallback}>like</button>
       <br />
       {`added by ${blog.user.name}`}
     </TogglableSpan>

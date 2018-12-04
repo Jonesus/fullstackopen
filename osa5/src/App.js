@@ -130,7 +130,14 @@ class App extends React.Component {
           </Togglable>
           <br />
           {this.state.blogs.map(blog => 
-            <Blog key={blog._id} blog={blog}/>
+            <Blog
+              key={blog._id}
+              blog={blog}
+              likeCallback={async () => {
+                await blogService.likeBlog(blog, this.state.user.token)
+                this.refreshBlogs()
+              }}
+            />
           )}
         </div>
       );
