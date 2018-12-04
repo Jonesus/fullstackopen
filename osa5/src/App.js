@@ -14,7 +14,18 @@ class App extends React.Component {
     this.passwordInput = React.createRef()
 
     this.submitLogin = this.submitLogin.bind(this)
+    this.logoutUser = this.logoutUser.bind(this)
   }
+
+  async componentDidMount() {
+    const blogs = await blogService.getAll()
+    this.setState({ blogs })
+
+    const cachedUser = localStorage.getItem('user')
+    if (cachedUser) {
+      this.setState({ user: JSON.parse(cachedUser) })
+    }
+  } 
 
   async submitLogin(event) {
     event.preventDefault()
@@ -23,12 +34,14 @@ class App extends React.Component {
       this.passwordInput.current.value
     )
     this.setState({ user })
+    localStorage.setItem('user', JSON.stringify(user))
   }
 
-  async componentDidMount() {
-    const blogs = await blogService.getAll()
-    this.setState({ blogs })
-  } 
+  logoutUser(event) {
+    event.preventDefault()
+    this.setState({ user: null })
+    localStorage.removeItem('user')
+  }
 
   render() {
     return this.state.user === null
@@ -51,8 +64,11 @@ class App extends React.Component {
         </div>
       ) : (
         <div>
-          <h2>blogs</h2>
-          <h3>{`${this.state.user.name} logged in`}</h3>
+          <h1>blogs</h1>
+          <p>
+            {`${this.state.user.name} logged in`}
+            <button onClick={this.logoutUser}>logout</button>
+          </p>
           {this.state.blogs.map(blog => 
             <Blog key={blog._id} blog={blog}/>
           )}
