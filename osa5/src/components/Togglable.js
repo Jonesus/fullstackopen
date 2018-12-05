@@ -54,7 +54,7 @@ export class TogglableSpan extends React.Component {
         <div>
           <span onClick={this.toggleVisibility}>{this.props.buttonLabel}</span>
         </div>
-        <div style={showWhenVisible}>
+        <div style={showWhenVisible} className="toggleContent">
           {this.props.children}
         </div>
       </div>
