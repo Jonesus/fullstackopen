@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 
 export class Togglable extends React.Component {
   constructor(props) {
@@ -60,3 +61,13 @@ export class TogglableSpan extends React.Component {
     )
   }
 }
+
+Togglable.propTypes = {
+  buttonLabel: PropTypes.string.isRequired,
+  children: PropTypes.node.isRequired,
+};
+
+TogglableSpan.propTypes = {
+  buttonLabel: PropTypes.string.isRequired,
+  children: PropTypes.node.isRequired,
+};
