@@ -21,4 +21,13 @@ const likeBlog = async (blog, authToken) => {
   )
 }
 
-export default { getAll, createBlog, likeBlog }
+const deleteBlog = async (blog, authToken) => {
+  if (!window.confirm('u sure?')) { return }
+  const header = `bearer ${authToken}`;
+  await axios.delete(
+    `${baseUrl}/${blog._id}`,
+    { headers: { Authorization: header } }
+  )
+}
+
+export default { getAll, createBlog, likeBlog, deleteBlog }

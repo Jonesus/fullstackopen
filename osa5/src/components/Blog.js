@@ -9,7 +9,7 @@ const blogStyle = {
   marginBottom: 5
 }
 
-const Blog = ({blog, likeCallback}) => (
+const Blog = ({blog, likeCallback, deleteCallback}) => (
   <div style={blogStyle}>
     <TogglableSpan buttonLabel={`${blog.title} ${blog.author}`}>
       <a href={blog.url}>{blog.url}</a>
@@ -18,6 +18,10 @@ const Blog = ({blog, likeCallback}) => (
       <button onClick={likeCallback}>like</button>
       <br />
       {`added by ${blog.user.name}`}
+      <br />
+      {deleteCallback &&
+        <button onClick={deleteCallback}>delete</button>
+      }
     </TogglableSpan>
   </div>  
 )

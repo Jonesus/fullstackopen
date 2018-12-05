@@ -137,6 +137,14 @@ class App extends React.Component {
                 await blogService.likeBlog(blog, this.state.user.token)
                 this.refreshBlogs()
               }}
+              deleteCallback={
+                (!blog.user || blog.user.username === this.state.user.username)
+                  ? async () => {
+                    await blogService.deleteBlog(blog, this.state.user.token)
+                    this.refreshBlogs()
+                  }
+                  : undefined
+              }
             />
           )}
         </div>

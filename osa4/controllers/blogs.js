@@ -42,7 +42,7 @@ blogsRouter.delete('/:id', async (request, response) => {
       return response.status(401).json({ error: 'token missing or invalid' })
     }
 
-    if (blog.user.toString() === decodedToken.id.toString()) {
+    if (!blog.user || blog.user.toString() === decodedToken.id.toString()) {
       await Blog.findByIdAndRemove(request.params.id)
       response.sendStatus(204)
     } else {
