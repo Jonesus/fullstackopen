@@ -12,7 +12,6 @@ const blogs = [
     url: "https://reactpatterns.com/",
     likes: 7,
     user
-    
   },
   {
     id: "5a451df7571c224a31b5c8cf",
