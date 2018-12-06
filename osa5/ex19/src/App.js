@@ -25,8 +25,15 @@ class App extends React.Component {
           </div>
         )}
         <h2>create new</h2>
-        <form>
-          <div><input /></div>
+        <form onSubmit={e => {
+          e.preventDefault()
+          this.props.store.dispatch({
+            type: 'NEW_ANECDOTE',
+            data: e.target.anecdote.value
+          })
+          e.target.anecdote.value = ''
+        }}>
+          <div><input name="anecdote"/></div>
           <button>create</button> 
         </form>
       </div>
