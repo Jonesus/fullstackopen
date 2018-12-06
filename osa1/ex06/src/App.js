@@ -1,8 +1,12 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import {createStore} from 'redux'
+import counterReducer from './counterReducer'
 
-const FeedbackButton = ({callback, id, children}) => (
-  <button onClick={callback} id={id}>{children}</button>
+const store = createStore(counterReducer)
+
+const FeedbackButton = ({callback, children}) => (
+  <button onClick={callback}>{children}</button>
 );
 
 const StatisticRow = ({heading, data}) => (
@@ -12,9 +16,9 @@ const StatisticRow = ({heading, data}) => (
   </tr>
 );
 
-const Statistics = ({good, neutral, bad}) => (
+const Statistics = ({good, ok, bad}) => (
   <div>
-    {(good + neutral + bad) === 0 ? (
+    {(good + ok + bad) === 0 ? (
       <div>ei yhtään palautetta annettu</div>
     ) : (
       <table>
@@ -25,7 +29,7 @@ const Statistics = ({good, neutral, bad}) => (
           />
           <StatisticRow
             heading="neutraali"
-            data={neutral}
+            data={ok}
           />
           <StatisticRow
             heading="huono"
@@ -33,11 +37,11 @@ const Statistics = ({good, neutral, bad}) => (
           />
           <StatisticRow
             heading="keskiarvo"
-            data={(((good - bad) / (good + neutral + bad)) || 0).toFixed(1)}
+            data={(((good - bad) / (good + ok + bad)) || 0).toFixed(1)}
           />
           <StatisticRow
             heading="positiivisia"
-            data={`${(((good / (good + neutral + bad))*100) || 0).toFixed(1)} %`}
+            data={`${(((good / (good + ok + bad))*100) || 0).toFixed(1)} %`}
           />
         </tbody>
       </table>
@@ -46,33 +50,27 @@ const Statistics = ({good, neutral, bad}) => (
 );
 
 class App extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      good: 0,
-      neutral: 0,
-      bad: 0,
-    };
-    this.handleOnClick = this.handleOnClick.bind(this);
-  }
-  /** Ebin 1.10 solution */
-  handleOnClick(e) {
-    const target = e.target.id
-    this.setState({[target]: this.state[target] + 1})
-  }
-
   render() {
     return (
       <div>
         <h1>anna palautetta</h1>
         <div>
-          <FeedbackButton callback={this.handleOnClick} id="good">hyvä</FeedbackButton>
-          <FeedbackButton callback={this.handleOnClick} id="neutral">neutraal</FeedbackButton>
-          <FeedbackButton callback={this.handleOnClick} id="bad">huono</FeedbackButton>
+          <FeedbackButton callback={e => store.dispatch({ type: 'GOOD' })}>
+            hyvä
+          </FeedbackButton>
+          <FeedbackButton callback={e => store.dispatch({ type: 'OK' })}>
+            neutraali
+          </FeedbackButton>
+          <FeedbackButton callback={e => store.dispatch({ type: 'BAD' })}>
+            huono
+          </FeedbackButton>
         </div>
 
         <h2>statistiikka</h2>
-        <Statistics good={this.state.good} neutral={this.state.neutral} bad={this.state.bad} />
+        <Statistics {...store.getState()} />
+        <button onClick={e => store.dispatch({ type: 'ZERO' })}>
+          nollaa
+        </button>
       </div>
     );
   }
@@ -80,7 +78,10 @@ class App extends React.Component {
 
 export default App;
 
-ReactDOM.render(
+const renderApp = () => ReactDOM.render(
   <App />,
   document.getElementById('root')
 )
+
+renderApp()
+store.subscribe(renderApp)
