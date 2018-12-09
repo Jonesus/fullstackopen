@@ -2,7 +2,7 @@ import React from 'react';
 import { voteAction } from '../reducers/anecdoteReducer';
 
 const AnecdoteList = ({ store }) => {
-  const anecdotes = store.getState();
+  const { anecdotes } = store.getState();
   return (
     <div>
       <h2>Anecdotes</h2>

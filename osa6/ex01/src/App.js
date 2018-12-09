@@ -5,11 +5,11 @@ import AnecdoteList from './components/AnecdoteList';
 
 const App = props => {
   const { store } = props;
-  const anecdotes = store.getState();
+  const { anecdotes } = store.getState();
   return (
     <div>
       <h1>Programming anecdotes</h1>
-      <Notification />
+      <Notification {...props} />
       <AnecdoteList {...props} />
       <AnecdoteForm {...props} />
     </div>
