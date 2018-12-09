@@ -1,3 +1,5 @@
+import anecdoteService from '../services/anecdoteService';
+
 const getId = () => (100000 * Math.random()).toFixed(0);
 
 export const asObject = anecdote => ({
@@ -7,25 +9,31 @@ export const asObject = anecdote => ({
 });
 
 const reducer = (state = [], action) => {
-  if (action.type === 'VOTE') {
-    const old = state.filter(a => a.id !== action.id);
-    const voted = state.find(a => a.id === action.id);
-
-    return [...old, { ...voted, votes: voted.votes + 1 }];
+  switch (action.type) {
+    case 'INIT':
+      return action.data;
+    case 'VOTE':
+      return [...state, action.anecdote];
+    case 'CREATE':
+      return [...state, { content: action.content, id: getId(), votes: 0 }];
+    case 'BACKEND_CREATE':
+      return [...state, action.anecdote];
+    default:
+      return state;
   }
-  if (action.type === 'CREATE') {
-    return [...state, { content: action.content, id: getId(), votes: 0 }];
-  }
-  if (action.type === 'BACKEND_CREATE') {
-    return [...state, action.anecdote];
-  }
-
-  return state;
 };
 
-export const voteAction = id => ({
+export const initAnecdotes = () => async dispatch => {
+  const data = await anecdoteService.fetchAnecdotes();
+  dispatch({
+    type: 'INIT',
+    data
+  });
+};
+
+export const voteAction = anecdote => ({
   type: 'VOTE',
-  id
+  anecdote
 });
 
 export const createAction = content => ({

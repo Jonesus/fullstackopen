@@ -2,6 +2,7 @@
   "extends": ["airbnb", "prettier", "react-app", "plugin:prettier/recommended"],
   "plugins": ["prettier"],
   "rules": {
+    "react/destructuring-assignment": 0,
     "react/prop-types": 0,
     "react/forbid-prop-types": 0,
     "prettier/prettier": ["error"],

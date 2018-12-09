@@ -19,7 +19,7 @@ const mapDispatchToProps = {
 const AnecdoteList = ({ anecdotes, voteAction, setAction, resetAction }) => {
   const vote = anecdote => async e => {
     await anecdoteService.voteAnecdote(anecdote);
-    voteAction(anecdote.id);
+    voteAction({ ...anecdote, votes: anecdote.votes + 1 });
     setAction(`you voted: '${anecdote.content}'`);
     setTimeout(() => resetAction(), 5000);
   };
