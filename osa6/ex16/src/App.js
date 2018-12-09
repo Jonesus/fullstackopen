@@ -1,11 +1,35 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, NavLink } from "react-router-dom";
 
 const Menu = () => (
-  <div>
-    <Link to="/">anecdotes</Link>&nbsp;
-    <Link to="/create">create new</Link>&nbsp;
-    <Link to="/about">about</Link>&nbsp;
+  <div style={{ padding: "1rem", backgroundColor: "cyan" }}>
+    <NavLink
+      exact
+      style={{ padding: "1rem" }}
+      activeStyle={{ backgroundColor: "pink" }}
+      to="/"
+    >
+      anecdotes
+    </NavLink>
+    &nbsp;
+    <NavLink
+      exact
+      style={{ padding: "1rem" }}
+      activeStyle={{ backgroundColor: "pink" }}
+      to="/create"
+    >
+      create new
+    </NavLink>
+    &nbsp;
+    <NavLink
+      exact
+      style={{ padding: "1rem" }}
+      activeStyle={{ backgroundColor: "pink" }}
+      to="/about"
+    >
+      about
+    </NavLink>
+    &nbsp;
   </div>
 );
 
@@ -15,7 +39,7 @@ const AnecdoteList = ({ anecdotes }) => (
     <ul>
       {anecdotes.map(anecdote => (
         <li key={anecdote.id}>
-          <Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link>
+          <NavLink to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</NavLink>
         </li>
       ))}
     </ul>
