@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Route, NavLink } from "react-router-dom";
+import { Container, Table } from "semantic-ui-react";
 
 const Menu = () => (
   <div style={{ padding: "1rem", backgroundColor: "cyan" }}>
@@ -36,13 +37,19 @@ const Menu = () => (
 const AnecdoteList = ({ anecdotes }) => (
   <div>
     <h2>Anecdotes</h2>
-    <ul>
-      {anecdotes.map(anecdote => (
-        <li key={anecdote.id}>
-          <NavLink to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</NavLink>
-        </li>
-      ))}
-    </ul>
+    <Table striped celled>
+      <Table.Body>
+        {anecdotes.map(anecdote => (
+          <Table.Row key={anecdote.id}>
+            <Table.Cell>
+              <NavLink to={`/anecdotes/${anecdote.id}`}>
+                {anecdote.content}
+              </NavLink>
+            </Table.Cell>
+          </Table.Row>
+        ))}
+      </Table.Body>
+    </Table>
   </div>
 );
 
@@ -210,7 +217,7 @@ class App extends React.Component {
 
   render() {
     return (
-      <div>
+      <Container>
         <h1>Software anecdotes</h1>
         <Router>
           <div>
@@ -253,7 +260,7 @@ class App extends React.Component {
           </div>
         </Router>
         <Footer />
-      </div>
+      </Container>
     );
   }
 }
