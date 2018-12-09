@@ -1,23 +1,28 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { createAction } from '../reducers/anecdoteReducer';
+import { backendCreateAction } from '../reducers/anecdoteReducer';
 import { setAction, resetAction } from '../reducers/notificationReducer';
+import anecdoteService from '../services/anecdoteService';
 
 const mapDispatchToProps = {
-  createAction,
+  backendCreateAction,
   setAction,
   resetAction
 };
 
 class AnecdoteForm extends React.Component {
-  handleSubmit = e => {
+  handleSubmit = async e => {
     e.preventDefault();
-    const content = e.target.anecdote.value;
-    this.props.createAction(content); // eslint-disable-line
-    this.props.setAction(`new anecdote: '${content}'`); // eslint-disable-line
-    setTimeout(() => this.props.resetAction(), 5000); // eslint-disable-line
-
+    const data = {
+      content: e.target.anecdote.value,
+      id: (100000 * Math.random()).toFixed(0),
+      votes: 0
+    };
     e.target.anecdote.value = '';
+    const resp = await anecdoteService.postAnecdote(data);
+    this.props.backendCreateAction(resp); // eslint-disable-line
+    this.props.setAction(`new anecdote: '${resp.content}'`); // eslint-disable-line
+    setTimeout(() => this.props.resetAction(), 5000); // eslint-disable-line
   };
 
   render() {
