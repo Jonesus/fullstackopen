@@ -1,37 +1,34 @@
 import React from "react";
 import { BrowserRouter as Router, Route, NavLink } from "react-router-dom";
-import { Container, Table, Grid, Image } from "semantic-ui-react";
+import {
+  Menu as StyleMenu,
+  Container,
+  Table,
+  Grid,
+  Image,
+  Form,
+  Button,
+  Message,
+} from "semantic-ui-react";
 
 const Menu = () => (
-  <div style={{ padding: "1rem", backgroundColor: "cyan" }}>
-    <NavLink
-      exact
-      style={{ padding: "1rem" }}
-      activeStyle={{ backgroundColor: "pink" }}
-      to="/"
-    >
-      anecdotes
-    </NavLink>
-    &nbsp;
-    <NavLink
-      exact
-      style={{ padding: "1rem" }}
-      activeStyle={{ backgroundColor: "pink" }}
-      to="/create"
-    >
-      create new
-    </NavLink>
-    &nbsp;
-    <NavLink
-      exact
-      style={{ padding: "1rem" }}
-      activeStyle={{ backgroundColor: "pink" }}
-      to="/about"
-    >
-      about
-    </NavLink>
-    &nbsp;
-  </div>
+  <StyleMenu fixed="top" inverted>
+    <StyleMenu.Item link>
+      <NavLink exact to="/">
+        anecdotes
+      </NavLink>
+    </StyleMenu.Item>
+    <StyleMenu.Item link>
+      <NavLink exact to="/create">
+        create new
+      </NavLink>
+    </StyleMenu.Item>
+    <StyleMenu.Item link>
+      <NavLink exact to="/about">
+        about
+      </NavLink>
+    </StyleMenu.Item>
+  </StyleMenu>
 );
 
 const AnecdoteList = ({ anecdotes }) => (
@@ -89,7 +86,12 @@ const About = () => (
         </p>
       </Grid.Column>
       <Grid.Column>
-        <Image src="http://jimgray.azurewebsites.net/Photos/Portrait1.jpg" />
+        <Image
+          circular
+          size="medium"
+          centered
+          src="http://jimgray.azurewebsites.net/Photos/Portrait1.jpg"
+        />
       </Grid.Column>
     </Grid.Row>
   </Grid>
@@ -140,33 +142,33 @@ class CreateNew extends React.Component {
     return (
       <div>
         <h2>create a new anecdote</h2>
-        <form onSubmit={this.handleSubmit}>
-          <div>
+        <Form onSubmit={this.handleSubmit}>
+          <Form.Field>
             content
             <input
               name="content"
               value={this.state.content}
               onChange={this.handleChange}
             />
-          </div>
-          <div>
+          </Form.Field>
+          <Form.Field>
             author
             <input
               name="author"
               value={this.state.author}
               onChange={this.handleChange}
             />
-          </div>
-          <div>
+          </Form.Field>
+          <Form.Field>
             url for more info
             <input
               name="info"
               value={this.state.info}
               onChange={this.handleChange}
             />
-          </div>
-          <button>create</button>
-        </form>
+          </Form.Field>
+          <Button>create</Button>
+        </Form>
       </div>
     );
   }
@@ -231,16 +233,7 @@ class App extends React.Component {
           <div>
             <Menu />
             {this.state.notification && (
-              <p
-                style={{
-                  padding: "1rem",
-                  border: "2px solid #0b0",
-                  borderRadius: "10px",
-                  color: "#0b0",
-                }}
-              >
-                {this.state.notification}
-              </p>
+              <Message success>{this.state.notification}</Message>
             )}
             <Route
               exact
