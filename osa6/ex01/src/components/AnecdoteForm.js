@@ -1,12 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { createAction } from '../reducers/anecdoteReducer';
-import { setAction, resetAction } from '../reducers/notificationReducer';
+import { notifyAction } from '../reducers/notificationReducer';
 
 const mapDispatchToProps = {
   createAction,
-  setAction,
-  resetAction
+  notifyAction
 };
 
 class AnecdoteForm extends React.Component {
@@ -15,8 +14,7 @@ class AnecdoteForm extends React.Component {
     const content = e.target.anecdote.value;
     e.target.anecdote.value = '';
     this.props.createAction(content);
-    this.props.setAction(`new anecdote: '${content}'`);
-    setTimeout(() => this.props.resetAction(), 5000);
+    this.props.notifyAction(`new anecdote: '${content}'`, 5000);
   };
 
   render() {

@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Filter from './Filter';
 import { voteAction } from '../reducers/anecdoteReducer';
-import { setAction, resetAction } from '../reducers/notificationReducer';
+import { notifyAction } from '../reducers/notificationReducer';
 
 const mapStateToProps = state => ({
   anecdotes: state.anecdotes.filter(a => a.content && a.content.includes(state.filters.filter))
@@ -10,16 +10,14 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
   voteAction,
-  setAction,
-  resetAction
+  notifyAction
 };
 
 // eslint-disable-next-line
-const AnecdoteList = ({ anecdotes, voteAction, setAction, resetAction }) => {
+const AnecdoteList = ({ anecdotes, voteAction, notifyAction }) => {
   const vote = anecdote => async e => {
     await voteAction({ ...anecdote, votes: anecdote.votes + 1 });
-    setAction(`you voted: '${anecdote.content}'`);
-    setTimeout(() => resetAction(), 5000);
+    notifyAction(`you voted: '${anecdote.content}'`, 5000);
   };
 
   return (
