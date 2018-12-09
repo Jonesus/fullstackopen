@@ -5,7 +5,7 @@ const initialState = {
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case 'SET_NOTIFICATION':
-      return { notificaiton: action.content };
+      return { notification: action.content };
     case 'RESET_NOTIFICATION':
       return initialState;
     default:
