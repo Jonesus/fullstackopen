@@ -1,9 +1,10 @@
 import React from 'react';
+import Filter from './Filter';
 import { voteAction } from '../reducers/anecdoteReducer';
 import { setAction, resetAction } from '../reducers/notificationReducer';
 
 const AnecdoteList = ({ store }) => {
-  const { anecdotes } = store.getState();
+  const { anecdotes, filters } = store.getState();
 
   const vote = anecdote => e => {
     store.dispatch(voteAction(anecdote.id));
@@ -14,8 +15,10 @@ const AnecdoteList = ({ store }) => {
   return (
     <div>
       <h2>Anecdotes</h2>
+      <Filter store={store} />
       {anecdotes
         .sort((a, b) => b.votes - a.votes)
+        .filter(a => a.content.includes(filters.filter))
         .map(anecdote => (
           <div key={anecdote.id}>
             <div>{anecdote.content}</div>
