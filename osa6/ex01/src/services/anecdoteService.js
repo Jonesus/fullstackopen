@@ -20,7 +20,7 @@ const voteAnecdote = async data => {
   const response = await fetch(`${URL}/${data.id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ ...data, votes: data.votes + 1 })
+    body: JSON.stringify(data)
   });
   const json = await response.json();
   return json;

@@ -13,10 +13,8 @@ const reducer = (state = [], action) => {
     case 'INIT':
       return action.data;
     case 'VOTE':
-      return [...state, action.anecdote];
+      return state.map(a => (a.id === action.anecdote.id ? action.anecdote : a));
     case 'CREATE':
-      return [...state, { content: action.content, id: getId(), votes: 0 }];
-    case 'BACKEND_CREATE':
       return [...state, action.anecdote];
     default:
       return state;
@@ -31,19 +29,25 @@ export const initAnecdotes = () => async dispatch => {
   });
 };
 
-export const voteAction = anecdote => ({
-  type: 'VOTE',
-  anecdote
-});
+export const voteAction = anecdote => async dispatch => {
+  await anecdoteService.voteAnecdote(anecdote);
+  dispatch({
+    type: 'VOTE',
+    anecdote
+  });
+};
 
-export const createAction = content => ({
-  type: 'CREATE',
-  content
-});
-
-export const backendCreateAction = anecdote => ({
-  type: 'BACKEND_CREATE',
-  anecdote
-});
+export const createAction = content => async dispatch => {
+  const newAnecdote = {
+    content,
+    id: getId(),
+    votes: 0
+  };
+  const resp = await anecdoteService.postAnecdote(newAnecdote);
+  dispatch({
+    type: 'CREATE',
+    anecdote: resp
+  });
+};
 
 export default reducer;
