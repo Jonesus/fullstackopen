@@ -191,7 +191,18 @@ class App extends React.Component {
         <Router>
           <div>
             <Menu />
-            {this.state.notification && <p>{this.state.notification}</p>}
+            {this.state.notification && (
+              <p
+                style={{
+                  padding: "1rem",
+                  border: "2px solid #0b0",
+                  borderRadius: "10px",
+                  color: "#0b0",
+                }}
+              >
+                {this.state.notification}
+              </p>
+            )}
             <Route
               exact
               path="/"
