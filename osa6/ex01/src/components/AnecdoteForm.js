@@ -1,15 +1,21 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { createAction } from '../reducers/anecdoteReducer';
 import { setAction, resetAction } from '../reducers/notificationReducer';
+
+const mapDispatchToProps = {
+  createAction,
+  setAction,
+  resetAction
+};
 
 class AnecdoteForm extends React.Component {
   handleSubmit = e => {
     e.preventDefault();
     const content = e.target.anecdote.value;
-    const { store } = this.props;
-    store.dispatch(createAction(content));
-    store.dispatch(setAction(`new anecdote: '${content}'`));
-    setTimeout(() => store.dispatch(resetAction()), 5000);
+    this.props.createAction(content); // eslint-disable-line
+    this.props.setAction(`new anecdote: '${content}'`); // eslint-disable-line
+    setTimeout(() => this.props.resetAction(), 5000); // eslint-disable-line
 
     e.target.anecdote.value = '';
   };
@@ -29,4 +35,9 @@ class AnecdoteForm extends React.Component {
   }
 }
 
-export default AnecdoteForm;
+const ConnectedAnecdoteForm = connect(
+  null,
+  mapDispatchToProps
+)(AnecdoteForm);
+
+export default ConnectedAnecdoteForm;

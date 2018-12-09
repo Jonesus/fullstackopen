@@ -8,7 +8,7 @@ const App = props => (
     <h1>Programming anecdotes</h1>
     <Notification />
     <AnecdoteList {...props} />
-    <AnecdoteForm {...props} />
+    <AnecdoteForm />
   </div>
 );
 

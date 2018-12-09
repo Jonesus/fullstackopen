@@ -1,11 +1,15 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { setFilter } from '../reducers/filterReducer';
+
+const mapDispatchToProps = {
+  setFilter
+};
 
 class Filter extends React.Component {
   handleChange = event => {
-    const { store } = this.props;
     const filterValue = event.target.value;
-    store.dispatch(setFilter(filterValue));
+    this.props.setFilter(filterValue); // eslint-disable-line
   };
 
   render() {
@@ -22,4 +26,9 @@ class Filter extends React.Component {
   }
 }
 
-export default Filter;
+const ConnectedFilter = connect(
+  null,
+  mapDispatchToProps
+)(Filter);
+
+export default ConnectedFilter;
