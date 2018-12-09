@@ -5,8 +5,7 @@ import { voteAction } from '../reducers/anecdoteReducer';
 import { setAction, resetAction } from '../reducers/notificationReducer';
 
 const mapStateToProps = state => ({
-  anecdotes: state.anecdotes,
-  filter: state.filters.filter
+  anecdotes: state.anecdotes.filter(a => a.content.includes(state.filters.filter))
 });
 
 const mapDispatchToProps = {
@@ -16,7 +15,7 @@ const mapDispatchToProps = {
 };
 
 // eslint-disable-next-line
-const AnecdoteList = ({ anecdotes, filter, voteAction, setAction, resetAction }) => {
+const AnecdoteList = ({ anecdotes, voteAction, setAction, resetAction }) => {
   const vote = anecdote => e => {
     voteAction(anecdote.id);
     setAction(`you voted: '${anecdote.content}'`);
@@ -29,7 +28,6 @@ const AnecdoteList = ({ anecdotes, filter, voteAction, setAction, resetAction })
       <Filter />
       {anecdotes
         .sort((a, b) => b.votes - a.votes)
-        .filter(a => a.content.includes(filter))
         .map(anecdote => (
           <div key={anecdote.id}>
             <div>{anecdote.content}</div>
